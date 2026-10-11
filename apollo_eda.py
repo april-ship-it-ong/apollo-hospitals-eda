@@ -25,9 +25,9 @@ print(df["appointment_status"].value_counts(dropna=False))
 
 # Check if the merge introduced unexpected duplicate rows
 if df["appointment_id"].duplicated().any():
-  print("Warning: Duplicate appointment IDs found after joining tables.")
+    print("Warning: Duplicate appointment IDs found after joining tables.")
 else:
-  print("Merge clean: No duplicate appointment IDs.")
+    print("Merge clean: No duplicate appointment IDs.")
 
 # In this dataset, 'None' indicates that the category does not apply 
 # (e.g., patient has no chronic condition or insurance), not missing data.
@@ -38,8 +38,8 @@ none_cols = [
     "cancellation_reason",
 ]
 for col in none_cols:
-  if col in df.columns:
-    df[col] = df[col].replace("None", np.nan)
+    if col in df.columns:
+        df[col] = df[col].replace("None", np.nan)
 
 # Parse dates and calculate lead time
 df["appointment_date"] = pd.to_datetime(df["appointment_date"], errors="coerce")
@@ -79,12 +79,12 @@ noshow_data["is_noshow"] = (noshow_data["appointment_status"] == "No-Show").asty
 
 # Helper function to compute consistent no-show metrics by any categorical dimension
 def calculate_noshow_rate(data, group_col):
-  result = data.groupby(group_col)["is_noshow"].agg(
-      appointments="count",
-      no_show_rate="mean"
-  )
-  result["no_show_rate"] = (result["no_show_rate"] * 100).round(2)
-  return result.sort_values("no_show_rate", ascending=False)
+    result = data.groupby(group_col)["is_noshow"].agg(
+        appointments="count",
+        no_show_rate="mean"
+    )
+    result["no_show_rate"] = (result["no_show_rate"] * 100).round(2)
+    return result.sort_values("no_show_rate", ascending=False)
 
 specialty_noshow = calculate_noshow_rate(noshow_data, "specialty")
 print("\nNo-show rate by specialty (%):")
